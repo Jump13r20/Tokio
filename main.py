@@ -52,7 +52,7 @@ class Producto:
 
     def create_table(self):
 
-        conexion = sqlite3.connect('')
+        pass
 
 
 
