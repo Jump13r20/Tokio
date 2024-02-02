@@ -50,13 +50,25 @@ class Producto:
         self.tabla.heading('3',text='Catalogo', anchor=CENTER)
         self.tabla.heading('4', text='Stock', anchor=CENTER)
 
-    def create_table(self):
 
-        pass
+    def creacionDb():
+        conexion = sqlite3.connect('database/productos.db')
+        return conexion
+    def creacionTablas():
+        cur.execute("CREATE TABLE productos (id_producto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Name TEXT NOT NULL, Price FLOAT NOT NULL, Catalogue TEXT NOT NULL, Stock INTEGER NOT NULL)")
+        con.commit()
 
+    def eliminacionTablas():
+        cur.execute("DROP TABLE IF EXISTS Name")
+        cur.execute("DROP TABLE IF EXISTS Price")
+        cur.execute("DROP TABLE IF EXISTS Catalogue")
+        cur.execute("DROP TABLE IF EXISTS Stock")
+        con.commit()  # Se actualizan los cambios pendientes en la BD
+        print(" > Reset DB ... OK")
 
-
-
+    #con = creacionDb()
+    #cur = con.cursor()
+    #eliminacionTablas()
 if __name__ == '__main__':
 
     root = Tk()
