@@ -63,16 +63,17 @@ class Producto:
         self.tabla.heading('3',text='Catalogo', anchor=CENTER)
         self.tabla.heading('4', text='Stock', anchor=CENTER)
 
-        #self.get_progucto()
+        self.get_progucto()
 
 
 
-    """def creacionDb():
+    def creacionDb():
         with sqlite3.connect('database/productos.db') as con:
 
             cur = con.cursor()
             cur.execute("DROP TABLE productos")
-            cur.execute("CREATE TABLE productos (id_producto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Name TEXT NOT NULL, Price FLOAT NOT NULL, Catalogue TEXT NOT NULL, Stock INTEGER NOT NULL)")
+            cur.execute("CREATE TABLE productos (id_producto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Name VARCHAR NOT NULL, Price FLOAT NOT NULL, Catalogue TEXT NOT NULL, Stock INTEGER NOT NULL)")
+            cur.execute("INSERT INTO productos (Name, Price, Catalogue, Stock) VALUES ('portatil',255,'informatica',25)")
             con.commit()
         return con, cur
     con, cur = creacionDb()
@@ -85,13 +86,13 @@ class Producto:
 
     def get_progucto(self):
 
-        query = 'SELECT * FROM productos ORDER BY nombre DESC'
+        query = 'SELECT * FROM productos ORDER BY Name DESC'
         registros = self.consultaDb(query)
 
         for fila in registros:
             print(fila)
-            self.tabla.insert('', 0, text=fila[1], values=[2][3][4])
-"""
+            self.tabla.insert('', 0, text=fila[0], values=fila[1:])
+
 
 
 if __name__ == '__main__':
