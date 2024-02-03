@@ -72,7 +72,9 @@ class Producto:
 
             cur = con.cursor()
             cur.execute("DROP TABLE productos")
+            print("Se eliminado la tabla")
             cur.execute("CREATE TABLE productos (id_producto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Name VARCHAR NOT NULL, Price FLOAT NOT NULL, Catalogue TEXT NOT NULL, Stock INTEGER NOT NULL)")
+            print("Tabla creada")
             cur.execute("INSERT INTO productos (Name, Price, Catalogue, Stock) VALUES ('portatil',255,'informatica',25)")
             con.commit()
         return con, cur
