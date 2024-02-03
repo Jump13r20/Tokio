@@ -3,6 +3,7 @@ from tkinter import *
 import sqlite3
 
 class Producto:
+
     def __init__(self, root):
         self.ventana = root #ventana de la aplicacion que le llamaremos ventana.
         self.ventana.title("App de gestor de productos")#este es el titulo de la app
@@ -30,9 +31,21 @@ class Producto:
         #input para almacenar el precio
         self.precio_input = Entry(frame).grid(row = 2, column = 1, pady= 5)
 
+        # label catalogo
+        self.catalogo = Label(frame, text="Catalogo: ").grid(row=3, column=0)
+
+        # input para almacenar el catalogo
+        self.catalogo_input = Entry(frame).grid(row=3, column=1)
+
+        # label stock
+        self.stock = Label(frame, text="Stock: ").grid(row=4, column=0)
+
+        # input para almacenar el stock
+        self.stock_input = Entry(frame).grid(row=4, column=1, pady=5)
+
         #boton dentro del frame.
         self.boton = ttk.Button(frame, text="Guardar Producto")
-        self.boton.grid(row = 3, columnspan = 2, sticky= W + E, pady= 5)
+        self.boton.grid(row = 5, columnspan = 2, sticky= W + E, pady= 5)
 
         #Personalizarcion de la tabla
         styles = ttk.Style()
@@ -50,25 +63,37 @@ class Producto:
         self.tabla.heading('3',text='Catalogo', anchor=CENTER)
         self.tabla.heading('4', text='Stock', anchor=CENTER)
 
+        #self.get_progucto()
 
-    def creacionDb():
-        conexion = sqlite3.connect('database/productos.db')
-        return conexion
-    def creacionTablas():
-        cur.execute("CREATE TABLE productos (id_producto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Name TEXT NOT NULL, Price FLOAT NOT NULL, Catalogue TEXT NOT NULL, Stock INTEGER NOT NULL)")
-        con.commit()
 
-    def eliminacionTablas():
-        cur.execute("DROP TABLE IF EXISTS Name")
-        cur.execute("DROP TABLE IF EXISTS Price")
-        cur.execute("DROP TABLE IF EXISTS Catalogue")
-        cur.execute("DROP TABLE IF EXISTS Stock")
-        con.commit()  # Se actualizan los cambios pendientes en la BD
-        print(" > Reset DB ... OK")
 
-    #con = creacionDb()
-    #cur = con.cursor()
-    #eliminacionTablas()
+    """def creacionDb():
+        with sqlite3.connect('database/productos.db') as con:
+
+            cur = con.cursor()
+            cur.execute("DROP TABLE productos")
+            cur.execute("CREATE TABLE productos (id_producto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Name TEXT NOT NULL, Price FLOAT NOT NULL, Catalogue TEXT NOT NULL, Stock INTEGER NOT NULL)")
+            con.commit()
+        return con, cur
+    con, cur = creacionDb()
+
+    def consultaDb(self, consulta, parametro = ()):
+
+        resultado = self.cur.execute(consulta, parametro)
+
+        return resultado
+
+    def get_progucto(self):
+
+        query = 'SELECT * FROM productos ORDER BY nombre DESC'
+        registros = self.consultaDb(query)
+
+        for fila in registros:
+            print(fila)
+            self.tabla.insert('', 0, text=fila[1], values=[2][3][4])
+"""
+
+
 if __name__ == '__main__':
 
     root = Tk()
