@@ -15,7 +15,7 @@ class Producto:
 
         #creacion de un fram donde irá cosas principales.
         frame = LabelFrame(self.ventana,text = "Registra un nuevo producto", padx=20, pady=10)
-        frame.grid(row = 0, column =0, columnspan=4, pady =20)
+        frame.grid(row = 0, column =0, columnspan=4, pady =15)
 
         #label nombre
         self.nombre = Label(frame, text="Nombre: ").grid(row = 1, column = 0)
@@ -55,7 +55,14 @@ class Producto:
 
         #texto para confirmar al usuario.
         self.confirmacion = Label(text="", fg = 'red')
-        self.confirmacion.grid(row = 5, columnspan = 2, sticky= W + E)
+        self.confirmacion.grid(row = 1, column = 0, columnspan = 4, sticky= W + E)
+
+        #boton eliminar
+        self.boton_eliminar = ttk.Button(text = 'ELIMINAR', command=self.eliminar_producto())
+        self.boton_eliminar.grid(row = 3, column = 0, columnspan = 2, sticky = W + E)
+        #boton editar
+        self.boton_editar = ttk.Button(text = 'EDITAR', command= self.editar_producto())
+        self.boton_editar.grid(row=3, column= 2, columnspan = 2, sticky= W + E)
 
         #Personalizarcion de la tabla
         styles = ttk.Style()
@@ -67,7 +74,8 @@ class Producto:
 
         columnas = (1, 2, 3,4)
         self.tabla = ttk.Treeview(height= 20, columns = columnas, style = "myestilo.Treeview", show='headings')
-        self.tabla.grid(row = 4, column = 0, columnspan = 4)
+        self.tabla.grid(row = 2, column = 0, columnspan = 4)
+        #self.tabla['padding'] = 5,10
         self.tabla.heading('1', text = 'Nombre', anchor = CENTER)
         self.tabla.heading('2', text='Precio', anchor = CENTER)
         self.tabla.heading('3',text='Catalogo', anchor=CENTER)
@@ -166,6 +174,16 @@ class Producto:
         else:
             self.confirmacion['text'] = 'El nombre, el precio, el catalogo y el stock son obligatorios.'
             print("El nombre, el precio, el catalogo y el stock son obligatorios.")
+
+    def eliminar_producto(self):
+
+        self.
+
+    def editar_producto(self):
+
+        pass
+
+
 
 if __name__ == '__main__':
 
