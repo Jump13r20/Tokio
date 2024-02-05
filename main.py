@@ -103,29 +103,41 @@ class Producto:
             print(fila)
             self.tabla.insert('', 0, text=fila[0], values=fila[1:])
 
+    def pruebaNumerico(self,prueba):
+
+        return prueba.isdigit()
+
+    def pruebaAlpha(self,prueba):
+        return prueba.isalpha()
+
     def validacionNombre(self):
 
-        comprobasion = str(self.nombre_input.get())
-        return len(comprobasion) != 0 and str == type(comprobasion)
+        comprobasion = self.nombre_input.get()
+        print(comprobasion)
+        return len(comprobasion) != 0 and self.pruebaAlpha(comprobasion)
 
     def validacionPrecio(self):
 
-        comprobasion = float(self.precio_input.get())
-        return len(comprobasion) != 0 and float == type(comprobasion)
+        comprobasion = self.precio_input.get()
+        return len(comprobasion) != 0 and self.pruebaNumerico(comprobasion)
 
     def validacionCatalogo(self):
 
-        comprobasion = str(self.catalogo_input.get())
-        return len(comprobasion) != 0 and str == type(comprobasion)
+        comprobasion = self.catalogo_input.get()
+        return len(comprobasion) != 0 and self.pruebaAlpha(comprobasion)
 
     def validacionStock(self):
 
         comprobasion = self.stock_input.get()
-        return len(comprobasion) != 0 and int == type(comprobasion)
+        return len(comprobasion) != 0 and self.pruebaNumerico(comprobasion)
 
     def get_nuevoProducto(self):
 
         if self.validacionNombre() and self.validacionPrecio() and self.validacionCatalogo() and self.validacionStock():
+            query = "INSERT INTO productos (Name, Price, Catalogue, Stock) VALUES (?,?,?,?)"
+            parametros = (self.nombre_input.get(),self.precio_input.get(),self.catalogo_input.get(), self.stock_input.get())
+            self.consultaDb(query,parametros)
+            self.get_producto()
             print("Hecho")
         elif self.validacionNombre() == False and self.validacionPrecio() and self.validacionCatalogo() and self.validacionStock():
             print("necesitas poner el nombre y no puede contener numeros")
