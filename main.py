@@ -53,6 +53,10 @@ class Producto:
         self.boton = ttk.Button(frame, text="Guardar Producto", command=self.get_nuevoProducto)
         self.boton.grid(row = 5, columnspan = 2, sticky= W + E, pady= 5)
 
+        #texto para confirmar al usuario.
+        self.confirmacion = Label(text="", fg = 'red')
+        self.confirmacion.grid(row = 5, columnspan = 2, sticky= W + E)
+
         #Personalizarcion de la tabla
         styles = ttk.Style()
         styles.configure("myestilo.Treeview", highlightthickness= 0, bd=0, font=('Calibri', 11))
@@ -85,16 +89,23 @@ class Producto:
             print("Tabla creada")
             cur.execute("INSERT INTO productos (Name, Price, Catalogue, Stock) VALUES ('portatil',255,'informatica',25)")
             con.commit()
-        return con, cur
-    con, cur = creacionDb()
+        return con
+    con = creacionDb()
+    cur = con.cursor()
 
     def consultaDb(self, consulta, parametro = ()):
 
         resultado = self.cur.execute(consulta, parametro)
+        self.con.commit()
         return resultado
 
 
     def get_producto(self):
+
+        registros_tabla = self.tabla.get_children()
+
+        for fila in registros_tabla:
+            self.tabla.delete(fila)
 
         query = 'SELECT * FROM productos ORDER BY Name DESC'
         registros = self.consultaDb(query)
@@ -138,16 +149,22 @@ class Producto:
             parametros = (self.nombre_input.get(),self.precio_input.get(),self.catalogo_input.get(), self.stock_input.get())
             self.consultaDb(query,parametros)
             self.get_producto()
+            self.confirmacion['text'] = 'El producto {} se añadido correctamente'.format(self.nombre_input.get())
             print("Hecho")
         elif self.validacionNombre() == False and self.validacionPrecio() and self.validacionCatalogo() and self.validacionStock():
+            self.confirmacion['text'] = 'necesitas poner el nombre y no puede contener numeros'
             print("necesitas poner el nombre y no puede contener numeros")
         elif self.validacionNombre() and self.validacionPrecio() == False and self.validacionCatalogo() and self.validacionStock():
+            self.confirmacion['text'] = 'necesitas poner el precio y no puede contener letras'
             print("necesitas poner el precio y no puede contener letras")
         elif self.validacionNombre() and self.validacionPrecio() and self.validacionCatalogo() == False and self.validacionStock():
+            self.confirmacion['text'] = 'necesitas poner el catalogo y no puede contener numeros'
             print("necesitas poner el catalogo y no puede contener numeros")
         elif self.validacionNombre() and self.validacionPrecio() and self.validacionCatalogo() and self.validacionStock() == False:
+            self.confirmacion['text'] = 'necesitas poner el stock y no puedo contener letras'
             print("necesitas poner el stock y no puedo contener letras")
         else:
+            self.confirmacion['text'] = 'El nombre, el precio, el catalogo y el stock son obligatorios.'
             print("El nombre, el precio, el catalogo y el stock son obligatorios.")
 
 if __name__ == '__main__':
