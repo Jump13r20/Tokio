@@ -2,11 +2,6 @@ from tkinter import ttk
 from tkinter import *
 import sqlite3
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 9caade4 (intentando hacer un algoritmo para busquedas numericas dentro de un string)
 class Producto:
 
     def __init__(self, root):
@@ -34,40 +29,28 @@ class Producto:
         self.precio = Label(frame, text="Precio: ").grid(row = 2, column = 0)
 
         #input para almacenar el precio
-<<<<<<< HEAD
-        self.precio_input = Entry(frame).grid(row = 2, column = 1, pady= 5)
-=======
+
         self.precio_input = Entry(frame)
         self.precio_input.grid(row = 2, column = 1, pady= 5)
->>>>>>> 9caade4 (intentando hacer un algoritmo para busquedas numericas dentro de un string)
 
         # label catalogo
         self.catalogo = Label(frame, text="Catalogo: ").grid(row=3, column=0)
 
         # input para almacenar el catalogo
-<<<<<<< HEAD
-        self.catalogo_input = Entry(frame).grid(row=3, column=1)
-=======
         self.catalogo_input = Entry(frame)
         self.catalogo_input.grid(row=3, column=1)
->>>>>>> 9caade4 (intentando hacer un algoritmo para busquedas numericas dentro de un string)
 
         # label stock
         self.stock = Label(frame, text="Stock: ").grid(row=4, column=0)
 
         # input para almacenar el stock
-<<<<<<< HEAD
         self.stock_input = Entry(frame).grid(row=4, column=1, pady=5)
 
-        #boton dentro del frame.
-        self.boton = ttk.Button(frame, text="Guardar Producto")
-=======
         self.stock_input = Entry(frame)
         self.stock_input.grid(row=4, column=1, pady=5)
 
         #boton dentro del frame.
         self.boton = ttk.Button(frame, text="Guardar Producto", command=self.get_nuevoProducto)
->>>>>>> 9caade4 (intentando hacer un algoritmo para busquedas numericas dentro de un string)
         self.boton.grid(row = 5, columnspan = 2, sticky= W + E, pady= 5)
 
         #Personalizarcion de la tabla
@@ -86,11 +69,9 @@ class Producto:
         self.tabla.heading('3',text='Catalogo', anchor=CENTER)
         self.tabla.heading('4', text='Stock', anchor=CENTER)
 
-<<<<<<< HEAD
-        self.get_progucto()
-=======
+
         self.get_producto()
->>>>>>> 9caade4 (intentando hacer un algoritmo para busquedas numericas dentro de un string)
+
 
 
 
@@ -110,14 +91,10 @@ class Producto:
     def consultaDb(self, consulta, parametro = ()):
 
         resultado = self.cur.execute(consulta, parametro)
-
         return resultado
 
-<<<<<<< HEAD
-    def get_progucto(self):
-=======
+
     def get_producto(self):
->>>>>>> 9caade4 (intentando hacer un algoritmo para busquedas numericas dentro de un string)
 
         query = 'SELECT * FROM productos ORDER BY Name DESC'
         registros = self.consultaDb(query)
@@ -126,12 +103,9 @@ class Producto:
             print(fila)
             self.tabla.insert('', 0, text=fila[0], values=fila[1:])
 
-<<<<<<< HEAD
-
-=======
     def validacionNombre(self):
 
-        comprobasion = str((self.nombre_input.get())
+        comprobasion = str(self.nombre_input.get())
         return len(comprobasion) != 0 and str == type(comprobasion)
 
     def validacionPrecio(self):
@@ -163,7 +137,6 @@ class Producto:
             print("necesitas poner el stock y no puedo contener letras")
         else:
             print("El nombre, el precio, el catalogo y el stock son obligatorios.")
->>>>>>> 9caade4 (intentando hacer un algoritmo para busquedas numericas dentro de un string)
 
 if __name__ == '__main__':
 
