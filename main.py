@@ -15,11 +15,12 @@ class Producto:
         #self.ventana.config(bg="black")#Color de fondo de la ventana.
 
         #creacion de un fram donde irá cosas principales.
-        frame = LabelFrame(self.ventana,text = "Registra un nuevo producto", padx=20, pady=10)
+        frame = LabelFrame(self.ventana,text = "Registra un nuevo producto", padx=30, pady=20, font=('Calibri', 11, 'bold'))
         frame.grid(row = 0, column =0, columnspan=4, pady =8)
 
         #label nombre
-        self.nombre = Label(frame, text="Nombre: ").grid(row = 1, column = 0)
+        self.nombre = Label(frame, text="Nombre: ", font=('Calibri', 10, 'bold'))
+        self.nombre.grid(row = 1, column = 0, )
 
         #input para almacenar el nombre
         self.nombre_input = Entry(frame)
@@ -27,35 +28,36 @@ class Producto:
         self.nombre_input.focus()
 
         #label precio
-        self.precio = Label(frame, text="Precio: ").grid(row = 2, column = 0)
+        self.precio = Label(frame, text="Precio: ", font=('Calibri', 10, 'bold'))
+        self.precio.grid(row = 2, column = 0)
 
         #input para almacenar el precio
 
         self.precio_input = Entry(frame)
-        self.precio_input.grid(row = 2, column = 1, pady= 5)
+        self.precio_input.grid(row = 2, column = 1, pady= 8)
 
         # label catalogo
-        self.catalogo = Label(frame, text="Categoria: ").grid(row=3, column=0)
+        self.catalogo = Label(frame, text="Categoria: ", font=('Calibri', 10, 'bold'))
+        self.catalogo.grid(row=3, column=0)
 
         # input para almacenar el catalogo
         self.catalogo_input = Entry(frame)
         self.catalogo_input.grid(row=3, column=1)
 
         # label stock
-        self.stock = Label(frame, text="Stock: ").grid(row=4, column=0)
+        self.stock = Label(frame, text="Stock: ", font=('Calibri', 10, 'bold'))
+        self.stock.grid(row=4, column=0)
 
         # input para almacenar el stock
-        self.stock_input = Entry(frame).grid(row=4, column=1, pady=5)
-
         self.stock_input = Entry(frame)
-        self.stock_input.grid(row=4, column=1, pady=5)
+        self.stock_input.grid(row=4, column=1, pady=8)
 
         #boton dentro del frame.
         self.boton = ttk.Button(frame, text="Guardar Producto", command=self.get_nuevoProducto)
         self.boton.grid(row = 5, columnspan = 2, sticky= W + E, pady= 5)
 
         #texto para confirmar al usuario.
-        self.confirmacion = Label(text="", fg = 'red', font=('Calibri',13, 'bold'))
+        self.confirmacion = Label(text="", fg = 'red', font=('Calibri',10, 'bold'))
         self.confirmacion.grid(row = 1, column = 0, columnspan = 4, sticky= W + E, pady= 10)
 
         #boton eliminar
@@ -76,7 +78,7 @@ class Producto:
         columnas = (1, 2, 3,4)
         self.tabla = ttk.Treeview(height= 20, columns = columnas, style = "myestilo.Treeview", show='headings')
         self.tabla.grid(row = 2, column = 0, columnspan = 4)
-        self.tabla.heading('1', text = 'Nombre', anchor = tkinter.CENTER)
+        self.tabla.heading('1', text = 'Nombre', anchor = CENTER)
         self.tabla.heading('2', text='Precio', anchor = CENTER)
         self.tabla.heading('3',text='Catalogo', anchor=CENTER)
         self.tabla.heading('4', text='Stock', anchor=CENTER)
@@ -132,7 +134,6 @@ class Producto:
     def validacionNombre(self):
 
         comprobasion = self.nombre_input.get()
-        print(comprobasion)
         return len(comprobasion) != 0 and self.pruebaAlpha(comprobasion)
 
     def validacionPrecio(self):
@@ -158,22 +159,25 @@ class Producto:
             self.consultaDb(query,parametros)
             self.get_producto()
             self.confirmacion['text'] = 'El producto {} se añadido correctamente'.format(self.nombre_input.get())
-            print("Hecho")
+            self.nombre_input.delete(0, END)
+            self.precio_input.delete(0, END)
+            self.catalogo_input.delete(0, END)
+            self.stock_input.delete(0, END)
+
         elif self.validacionNombre() == False and self.validacionPrecio() and self.validacionCatalogo() and self.validacionStock():
             self.confirmacion['text'] = 'necesitas poner el nombre y no puede contener numeros'
-            print("necesitas poner el nombre y no puede contener numeros")
+
         elif self.validacionNombre() and self.validacionPrecio() == False and self.validacionCatalogo() and self.validacionStock():
             self.confirmacion['text'] = 'necesitas poner el precio y no puede contener letras'
-            print("necesitas poner el precio y no puede contener letras")
+
         elif self.validacionNombre() and self.validacionPrecio() and self.validacionCatalogo() == False and self.validacionStock():
             self.confirmacion['text'] = 'necesitas poner el catalogo y no puede contener numeros'
-            print("necesitas poner el catalogo y no puede contener numeros")
+
         elif self.validacionNombre() and self.validacionPrecio() and self.validacionCatalogo() and self.validacionStock() == False:
             self.confirmacion['text'] = 'necesitas poner el stock y no puedo contener letras'
-            print("necesitas poner el stock y no puedo contener letras")
+
         else:
             self.confirmacion['text'] = 'El nombre, el precio, el catalogo y el stock son obligatorios.'
-            print("El nombre, el precio, el catalogo y el stock son obligatorios.")
 
     def eliminar_producto(self):
 
@@ -202,10 +206,10 @@ class Producto:
 
         self.confirmacion['text'] = ""
 
-        antiguo_nombre = self.tabla.item(self.tabla.selection())['values'][0]
-        antiguo_precio = self.tabla.item(self.tabla.selection())['values'][1]
-        antiguo_categoria = self.tabla.item(self.tabla.selection())['values'][2]
-        antiguo_stock = self.tabla.item(self.tabla.selection())['values'][3]
+        antiguo_nombreUno = self.tabla.item(self.tabla.selection())['values'][0]
+        antiguo_precioUno = self.tabla.item(self.tabla.selection())['values'][1]
+        antiguo_categoriaUno = self.tabla.item(self.tabla.selection())['values'][2]
+        antiguo_stockUno = self.tabla.item(self.tabla.selection())['values'][3]
 
         #Edicion de la nueva ventana creada para la edicion de los productos.
 
@@ -220,19 +224,13 @@ class Producto:
 
         # creacion de un fram donde irá cosas principales.
         frameEditar = LabelFrame(self.ventana_editar, text="Edita el producto", padx=20, pady=10, font=('Calibri', 12, 'bold'))
-        frameEditar.grid(row=1, column=0, columnspan=4, pady=50)
+        frameEditar.grid(row=1, column=0, columnspan=4, pady=20)
 
         # label nombre antiguo
-        """self.tituloN_antiguo = Label(frameEditar, text="Nombre antiguo".title())
-        self.tituloN_antiguo.grid(row=0, column=0)
-        nombreAntiguo = self.tabla.item(self.tabla.selection())['values'][0]
-        self.direcionUno = Label(frameEditar, text="---------->")
-        self.direcionUno.grid(row=0, column=1)
-        self.nombre_antiguo = Label(frameEditar,text ="{}".format(nombreAntiguo).upper())
-        self.nombre_antiguo.grid(row=0, column=2)"""
-        self.nombre_antiguo = self.tabla.item(self.tabla.selection())['values'][0]
-        self.tituloN_antiguo = Label(frameEditar, text="Nombre antiguo  ------>   {}".format(self.nombre_antiguo).title(), pady = 5)
-        self.tituloN_antiguo.grid(row=0, column=0,columnspan=3, sticky = W + E)
+        self.tituloN_antiguo = Label(frameEditar, text="Nombre antiguo  ------>   ".title(), pady = 5)
+        self.input_antiguo_nombre = Entry(frameEditar, textvariable=StringVar(self.ventana_editar, value=antiguo_nombreUno), state='readonly')
+        self.tituloN_antiguo.grid(row=0, column=0, sticky = W + E)
+        self.input_antiguo_nombre.grid(row=0, column=1)
         # label nombre nuevo
         self.nombre_nuevo = Label(frameEditar, text="Nombre nuevo: ".title(), font=('Calibri', 10, 'bold'))
         self.nombre_nuevo.grid(row=1, column=0, pady=5)
@@ -242,16 +240,10 @@ class Producto:
         self.nombre_inputUno.focus()
 
         # label precio antiguo
-        """self.tituloP_antiguo = Label(frameEditar, text="precio antiguo".title())
-        self.tituloP_antiguo.grid(row=2, column=0)
-        precioAntiguo = self.tabla.item(self.tabla.selection())['values'][1]
-        self.direcionDos = Label(frameEditar, text="---------->")
-        self.direcionDos.grid(row=2, column=1)
-        self.precio_antiguo = Label(frameEditar, text="{}".format(precioAntiguo).upper())
-        self.precio_antiguo.grid(row=2, column=2)"""
-        self.precio_antiguo = self.tabla.item(self.tabla.selection())['values'][1]
-        self.tituloN_antiguo = Label(frameEditar, text="precio antiguo   ------>   {}".format(self.precio_antiguo).title(), pady = 5)
-        self.tituloN_antiguo.grid(row=2, column=0, columnspan=3, sticky=W + E)
+        self.input_antiguo_precio = Entry(frameEditar,textvariable=StringVar(self.ventana_editar, value=antiguo_precioUno),state='readonly')
+        self.input_antiguo_precio.grid(row=2, column=1)
+        self.tituloN_antiguo = Label(frameEditar, text="precio antiguo   ------>   ".title(), pady = 5)
+        self.tituloN_antiguo.grid(row=2, column=0, sticky=W + E)
         # label precio
         self.precio_nuevo = Label(frameEditar, text="Precio nuevo: ".title(), font=('Calibri', 10, 'bold'))
         self.precio_nuevo.grid(row=3, column=0)
@@ -260,16 +252,10 @@ class Producto:
         self.precio_inputDos.grid(row=3, column=1, columnspan=3, sticky = W + E)
 
         # label categoria antiguo
-        """self.tituloC_antiguo = Label(frameEditar, text="categoria antigua".title())
-        self.tituloC_antiguo.grid(row=4, column=0)
-        categoriaAntiguo = self.tabla.item(self.tabla.selection())['values'][2]
-        self.direcionTres = Label(frameEditar, text="---------->")
-        self.direcionTres.grid(row=4, column=1)
-        self.categoria_antiguo = Label(frameEditar, text="{}".format(categoriaAntiguo).upper())
-        self.categoria_antiguo.grid(row=4, column=2)"""
-        self.categoria_antiguo = self.tabla.item(self.tabla.selection())['values'][2]
-        self.tituloN_antiguo = Label(frameEditar, text="categoria antiguo  ------>   {}".format(self.categoria_antiguo).title(), pady = 5)
-        self.tituloN_antiguo.grid(row=4, column=0, columnspan=3, sticky=W + E)
+        self.input_antiguo_categoria = Entry(frameEditar,textvariable=StringVar(self.ventana_editar, value=antiguo_categoriaUno),state='readonly')
+        self.input_antiguo_categoria.grid(row=4, column=1)
+        self.tituloN_antiguo = Label(frameEditar, text="categoria antiguo  ------>   ".title(), pady = 5)
+        self.tituloN_antiguo.grid(row=4, column=0, sticky=W + E)
         # label categoria nueva
         self.categoria_nuevo = Label(frameEditar, text="Categoria nuevo: ".title(), font=('Calibri', 10, 'bold'))
         self.categoria_nuevo.grid(row=5, column=0)
@@ -278,16 +264,10 @@ class Producto:
         self.categoria_inputTres.grid(row=5, column=1, columnspan=3, sticky=W + E)
 
         # label stock antiguo
-        """self.tituloS_antiguo = Label(frameEditar, text="stock antigua".title())
-        self.tituloS_antiguo.grid(row=6, column=0)
-        stockAntiguo = self.tabla.item(self.tabla.selection())['values'][3]
-        self.direcionCuatro = Label(frameEditar, text="---------->")
-        self.direcionCuatro.grid(row=6, column=1)
-        self.stock_antiguo = Label(frameEditar, text="{}".format(stockAntiguo).upper())
-        self.stock_antiguo.grid(row=6, column=2)"""
-        self.stock_antiguo = self.tabla.item(self.tabla.selection())['values'][3]
-        self.tituloN_antiguo = Label(frameEditar, text="stock antiguo  ------>   {}".format(self.stock_antiguo).title(), pady = 5)
-        self.tituloN_antiguo.grid(row=6, column=0, columnspan=3, sticky=W + E)
+        self.input_antiguo_stock = Entry(frameEditar,textvariable=StringVar(self.ventana_editar, value=antiguo_stockUno),state='readonly')
+        self.input_antiguo_stock.grid(row=6, column=1)
+        self.tituloN_antiguo = Label(frameEditar, text="stock antiguo  ------>   ".title(), pady = 5)
+        self.tituloN_antiguo.grid(row=6, column=0, sticky=W + E)
         # label stock nueva
         self.stock_nuevo = Label(frameEditar, text="stock nuevo: ".title(), font=('Calibri', 10, 'bold'))
         self.stock_nuevo.grid(row=7, column=0)
@@ -296,80 +276,402 @@ class Producto:
         self.stock_inputCuatro.grid(row=7, column=1, columnspan=3, sticky=W + E)
 
         # boton dentro del frame.
-        self.boton_actualizar = ttk.Button(frameEditar, text="Actualizar producto", command=lambda : self.actualizar_producto(self.nombre_antiguo,
-                                                                                                                              self.nombre_inputUno.get(),
-                                                                                                                              self.precio_antiguo,
-                                                                                                                              self.precio_inputDos.get(),
-                                                                                                                              self.categoria_antiguo,
-                                                                                                                              self.categoria_inputTres.get(),
-                                                                                                                              self.stock_antiguo,
-                                                                                                                              self.stock_inputCuatro.get()))
+        self.boton_actualizar = ttk.Button(frameEditar, text="Actualizar producto", command=lambda:self.actualizar_producto(self.input_antiguo_nombre.get(), self.nombre_inputUno.get(), self.input_antiguo_precio.get(), self.precio_inputDos.get(), self.input_antiguo_categoria.get(), self.categoria_inputTres.get(), self.input_antiguo_stock.get(), self.stock_inputCuatro.get()))
         self.boton_actualizar.grid(row=8, columnspan=4, sticky=W + E, pady=10)
+
+        self.confirmacionDos = Label (self.ventana_editar, text="", fg = 'red', font=('Calibri',10, 'bold'))
+        self.confirmacionDos.grid(row = 2, column = 0, columnspan = 4)
 
     def actualizar_producto(self, antiguo_nombre, nuevo_nombre, antiguo_precio, nuevo_precio, antigua_categoria, nueva_categoria, antiguo_stock, nuevo_stock):
 
         modificado = False
-        query = "UPDATE productos SET Name = ?, Preci = ?, Catalogue = ?, Stock = ? WHERE Name = ?, Preci = ?, Catalogue = ? AND Stock = ?"
+        query = 'UPDATE productos SET Name = ?, Price = ?, Catalogue = ?, Stock = ? WHERE Name = ? AND Price = ? AND Catalogue = ? AND Stock = ?'
 
-        if nuevo_nombre != "" and nuevo_precio != "" and nueva_categoria != "" and nuevo_stock != "":
-            modificado = True
-            parametros = (nuevo_nombre,nuevo_precio,nueva_categoria,nuevo_stock,antiguo_nombre,antiguo_precio,antigua_categoria,antiguo_stock)
+        if (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
 
-        elif nuevo_nombre != "" and nuevo_precio == "" and nueva_categoria == "" and nuevo_stock == "":
-            modificado = True
-            parametros = (nuevo_nombre,antiguo_precio,antigua_categoria,antiguo_stock,antiguo_nombre,antiguo_precio,antigua_categoria,antiguo_stock)
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre y categoria no puede contener numeros,\n precio y el stock no puede contener letras'
 
-        elif nuevo_nombre == "" and nuevo_precio != "" and nueva_categoria == "" and nuevo_stock == "":
-            modificado = True
-            parametros = (antiguo_nombre,nuevo_precio,antigua_categoria,antiguo_stock,antiguo_nombre,antiguo_precio,antigua_categoria,antiguo_stock)
+        elif (nuevo_nombre.isalpha() and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
 
-        elif nuevo_nombre == "" and nuevo_precio == "" and nueva_categoria != "" and nuevo_stock == "":
-            modificado = True
-            parametros = (antiguo_nombre,antiguo_precio,nueva_categoria,antiguo_stock,antiguo_nombre,antiguo_precio,antigua_categoria,antiguo_stock)
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'La categoria no puede contener numeros,\n precio y el stock no puede contener letras'
 
-        elif nuevo_nombre == "" and nuevo_precio == "" and nueva_categoria == "" and nuevo_stock != "":
-            modificado = True
-            parametros = (antiguo_nombre,antiguo_precio,antigua_categoria,nuevo_stock,antiguo_nombre,antiguo_precio,antigua_categoria,antiguo_stock)
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
 
-        elif nuevo_nombre == "" and nuevo_precio != "" and nueva_categoria != "" and nuevo_stock != "":
-            modificado = True
-            parametros = (antiguo_nombre,nuevo_precio,nueva_categoria,nuevo_stock,antiguo_nombre,antiguo_precio,antigua_categoria,antiguo_stock)
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre y categoria no puede contener numeros,\n el stock no puede contener letras'
 
-        elif nuevo_nombre != "" and nuevo_precio == "" and nueva_categoria != "" and nuevo_stock != "":
-            modificado = True
-            parametros = (nuevo_nombre,antiguo_precio,nueva_categoria,nuevo_stock,antiguo_nombre,antiguo_precio,antigua_categoria,antiguo_stock)
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
 
-        elif nuevo_nombre != "" and nuevo_precio != "" and nueva_categoria == "" and nuevo_stock != "":
-            modificado = True
-            parametros = (nuevo_nombre,nuevo_precio,antigua_categoria,nuevo_stock,antiguo_nombre,antiguo_precio,antigua_categoria,antiguo_stock)
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener numeros,\n precio y el stock no puede contener letras'
 
-        elif nuevo_nombre != "" and nuevo_precio != "" and nueva_categoria != "" and nuevo_stock == "":
-            modificado = True
-            parametros = (nuevo_nombre,nuevo_precio,nueva_categoria,antiguo_stock,antiguo_nombre,antiguo_precio,antigua_categoria,antiguo_stock)
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() and nuevo_stock != ''):
 
-        elif nuevo_nombre == "" and nuevo_precio == "" and nueva_categoria != "" and nuevo_stock != "":
-            modificado = True
-            parametros = (antiguo_nombre,antiguo_precio,nueva_categoria,nuevo_stock,antiguo_nombre,antiguo_precio,antigua_categoria,antiguo_stock)
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre y categoria no puede contener numeros,\n precio no puede contener letras'
 
-        elif nuevo_nombre != "" and nuevo_precio != "" and nueva_categoria == "" and nuevo_stock == "":
-            modificado = True
-            parametros = (nuevo_nombre, nuevo_precio, antigua_categoria, antiguo_stock, antiguo_nombre, antiguo_precio,antigua_categoria, antiguo_stock)
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() and nueva_categoria != '') and (nuevo_stock.isdigit() and nuevo_stock != ''):
 
-        elif nuevo_nombre != "" and nuevo_precio == "" and nueva_categoria != "" and nuevo_stock == "":
-            modificado = True
-            parametros = (nuevo_nombre, antiguo_precio, nueva_categoria, antiguo_stock, antiguo_nombre, antiguo_precio,antigua_categoria, antiguo_stock)
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener numeros,\n precio no puede contener letras'
 
-        elif nuevo_nombre != "" and nuevo_precio == "" and nueva_categoria == "" and nuevo_stock != "":
-            modificado = True
-            parametros = (nuevo_nombre, antiguo_precio, antigua_categoria, nuevo_stock, antiguo_nombre, antiguo_precio,antigua_categoria, antiguo_stock)
+        elif (nuevo_nombre.isalpha() and nuevo_nombre != '') and (nuevo_precio.isdigit() and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
 
-        elif nuevo_nombre == "" and nuevo_precio != "" and nueva_categoria != "" and nuevo_stock == "":
-            modificado = True
-            parametros = (antiguo_nombre, nuevo_precio, nueva_categoria, antiguo_stock, antiguo_nombre, antiguo_precio,antigua_categoria, antiguo_stock)
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'La categoria no puede contener numeros,\n el stock no puede contener letras'
 
-        elif nuevo_nombre == "" and nuevo_precio != "" and nueva_categoria == "" and nuevo_stock != "":
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() and nuevo_precio != '') and (nueva_categoria.isalpha() and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener numeros,\n el stock no puede contener letras'
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre y categoria no puede contener numeros'
+
+        elif (nuevo_nombre.isalpha() and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El precio y en stock no puede contener letras'
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() and nuevo_precio != '') and (nueva_categoria.isalpha() and nueva_categoria != '') and (nuevo_stock.isdigit() and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener numeros'
+
+        elif (nuevo_nombre.isalpha() and nuevo_nombre != '') and (nuevo_precio.isdigit() and nuevo_precio != '') and (nueva_categoria.isalpha() and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El stock no puede contener letras'
+
+        elif (nuevo_nombre.isalpha() and nuevo_nombre != '') and (nuevo_precio.isdigit() and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'La categoria no puede contener numeros'
+
+        elif (nuevo_nombre.isalpha() and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() and nueva_categoria != '') and (nuevo_stock.isdigit() and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El precio no puede contener letras'
+
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre y categoria no puede contener numeros y\n el precio no puede contener letras'
+
+        elif (nuevo_nombre.isalpha() and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'La categoria no puede contener numeros y\n el precio no puede contener letras'
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre y categoria no puede contener numeros'
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() and nueva_categoria != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener numeros y\n el precio no puede contener letras'
+
+        elif (nuevo_nombre.isalpha() and nuevo_nombre != '') and (nuevo_precio.isdigit() and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'La categoria no puede contener numeros'
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() and nuevo_precio != '') and (nueva_categoria.isalpha() and nueva_categoria != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener letras'
+
+        elif (nuevo_nombre.isalpha() and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() and nueva_categoria != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El precio no puede contener letras'
+
+        elif (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El precio y en stock no puede contener letras y\n en categoria no puede contener numeros'
+
+        elif (nuevo_precio.isdigit() and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'En stock no puede contener letras y\n en categoria no puede contener numeros'
+
+        elif (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'En precio y en stock no puede contener letras'
+
+        elif (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'En precio no puede contener letras y\n en categoria no puede contener numeros'
+
+        elif (nuevo_precio.isdigit() and nuevo_precio != '') and (nueva_categoria.isalpha() and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'En stock no puede contener letras'
+
+        elif (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() and nueva_categoria != '') and (nuevo_stock.isdigit() and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'En precio no puede contener letras'
+
+        elif (nuevo_precio.isdigit() and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'En categoria no puede contener numeros'
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nuevo_stock.isalpha() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El precio y stock no puede contener letras y\n el nombre no puede contener numeros'
+
+        elif (nuevo_nombre.isalpha() and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nuevo_stock.isalpha() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El precio y stock no puede contener letras'
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() and nuevo_precio != '') and (nuevo_stock.isalpha() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener numeros y\n en stock no puede contener letras'
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nuevo_stock.isalpha() and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'En nombre no puede contener numeros y\n el precio no puede contener letras'
+
+        elif (nuevo_nombre.isalpha() and nuevo_nombre != '') and (nuevo_precio.isdigit() and nuevo_precio != '') and (nuevo_stock.isalpha() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El stock no puede contener letras'
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() and nuevo_precio != '') and (nuevo_stock.isalpha() and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener letras'
+
+        elif (nuevo_nombre.isalpha() and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nuevo_stock.isalpha() and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El precio no puede contener letras'
+
+        elif (nuevo_nombre.isdigit() == False and nuevo_nombre != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre y en categoria no puede contener numeros y\n el stock no puede contener letras'
+
+        elif (nuevo_nombre.isdigit() and nuevo_nombre != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El stock no puede contener letras y\n la categoria no puede contener numeros'
+
+        elif (nuevo_nombre.isdigit() == False and nuevo_nombre != '') and (nueva_categoria.isalpha() and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener numeros y\n el stock no puede contener letras'
+
+        elif (nuevo_nombre.isdigit() == False and nuevo_nombre != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre y categoria no puede contener letras'
+
+        elif (nuevo_nombre.isdigit() and nuevo_nombre != '') and (nueva_categoria.isalpha() and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El stock no puede contener letras'
+
+        elif (nuevo_nombre.isdigit() == False and nuevo_nombre != '') and (nueva_categoria.isalpha() and nueva_categoria != '') and (nuevo_stock.isdigit() and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener numeros'
+
+        elif (nuevo_nombre.isdigit() and nuevo_nombre != '') and (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'La categoria no puede contener numeros'
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener numeros y\n el precio no puede contener letras'
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nuevo_precio.isdigit() and nuevo_precio != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener numeros'
+
+        elif (nuevo_nombre.isalpha() and nuevo_nombre != '') and (nuevo_precio.isdigit() == False and nuevo_precio != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El precio no puede contener numeros'
+
+        elif (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El precio no puede contener letra y\n la categoria no puede contener numeros'
+
+        elif (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nueva_categoria.isalpha() and nueva_categoria != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El precio no puede contener letra'
+
+        elif (nuevo_precio.isdigit() and nuevo_precio != '') and (nueva_categoria.isalpha() == False and nueva_categoria != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'La categoria no puede contener letra'
+
+        elif (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'La categoria no puede contener numeros y\n el stock no puede contener letras'
+
+        elif (nueva_categoria.isalpha() == False and nueva_categoria != '') and (nuevo_stock.isdigit() and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'La categoria no puede contener numeros'
+
+        elif (nueva_categoria.isalpha() and nueva_categoria != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El stock no puede contener numeros'
+
+        elif (nuevo_stock.isdigit() == False and nuevo_stock != '') and (nuevo_nombre.isalpha() == False and nuevo_nombre != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El stock no puede contener letra y\n el nombre no puede contener numeros'
+
+        elif (nuevo_stock.isdigit() == False and nuevo_stock != '') and (nuevo_nombre.isalpha() and nuevo_nombre != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El stock no puede contener letra'
+
+        elif (nuevo_stock.isdigit() and nuevo_stock != '') and (nuevo_nombre.isalpha() == False and nuevo_nombre != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener letra'
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nueva_categoria.isalpha() == False and nueva_categoria != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre y categoria no puede contener numeros'
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != '') and (nueva_categoria.isalpha() and nueva_categoria != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener numeros'
+
+        elif (nuevo_nombre.isalpha() and nuevo_nombre != '') and (nueva_categoria.isalpha() == False and nueva_categoria != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'La categoria no puede contener numeros'
+
+        elif (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El precio y stock no puede contener letra'
+
+        elif (nuevo_precio.isdigit() == False and nuevo_precio != '') and (nuevo_stock.isdigit() and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El precio no puede contener letra'
+
+        elif (nuevo_precio.isdigit() and nuevo_precio != '') and (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El stock no puede contener letra'
+
+        elif (nuevo_nombre.isalpha() == False and nuevo_nombre != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El nombre no puede contener numeros'
+
+        elif (nuevo_precio.isdigit() == False and nuevo_precio != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El precio no puede contener letra'
+
+        elif (nueva_categoria.isalpha() == False and nueva_categoria != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'La categoria no puede contener numeros'
+
+        elif (nuevo_stock.isdigit() == False and nuevo_stock != ''):
+
+            self.confirmacionDos['text'] = ''
+            self.confirmacionDos['text'] = 'El stock no puede contener letra'
+
+        elif nuevo_nombre == '' and nuevo_precio == '' and nueva_categoria == '' and nuevo_stock == '':
+
+            self.ventana_editar.destroy()
+            self.confirmacion['text'] = "El producto {} no ha sido actualizado con éxito.".format(antiguo_nombre)
+
+        elif nuevo_nombre != '' and nuevo_precio != '' and nueva_categoria != '' and nuevo_stock != '':
+            parametros = (nuevo_nombre, nuevo_precio, nueva_categoria, nuevo_stock, antiguo_nombre, antiguo_precio, antigua_categoria, antiguo_stock)
             modificado = True
-            parametros = (antiguo_nombre, nuevo_precio, antigua_categoria, nuevo_stock, antiguo_nombre, antiguo_precio,antigua_categoria, antiguo_stock)
+
+        elif nuevo_nombre != '' and nuevo_precio == '' and nueva_categoria == '' and nuevo_stock == '':
+            parametros = (nuevo_nombre, antiguo_precio, antigua_categoria, antiguo_stock, antiguo_nombre, antiguo_precio,antigua_categoria, antiguo_stock)
+            modificado = True
+
+        elif nuevo_nombre == '' and nuevo_precio != '' and nueva_categoria == '' and nuevo_stock == '':
+            parametros = ( antiguo_nombre, nuevo_precio, antigua_categoria, antiguo_stock, antiguo_nombre, antiguo_precio, antigua_categoria, antiguo_stock)
+            modificado = True
+
+        elif nuevo_nombre == '' and nuevo_precio == '' and nueva_categoria != '' and nuevo_stock == '':
+            parametros = (antiguo_nombre, antiguo_precio, nueva_categoria, antiguo_stock, antiguo_nombre, antiguo_precio, antigua_categoria, antiguo_stock)
+            modificado = True
+
+        elif nuevo_nombre == '' and nuevo_precio == '' and nueva_categoria == '' and nuevo_stock != '':
+            parametros = (antiguo_nombre, antiguo_precio, antigua_categoria, nuevo_stock, antiguo_nombre, antiguo_precio, antigua_categoria, antiguo_stock)
+            modificado = True
+
+        elif nuevo_nombre == '' and nuevo_precio != '' and nueva_categoria != '' and nuevo_stock != '':
+            parametros = (antiguo_nombre, nuevo_precio, nueva_categoria, nuevo_stock, antiguo_nombre, antiguo_precio, antigua_categoria, antiguo_stock)
+            modificado = True
+
+        elif nuevo_nombre != '' and nuevo_precio == '' and nueva_categoria != '' and nuevo_stock != '':
+            parametros = (nuevo_nombre, antiguo_precio, nueva_categoria, nuevo_stock, antiguo_nombre, antiguo_precio, antigua_categoria, antiguo_stock)
+            modificado = True
+
+        elif nuevo_nombre != '' and nuevo_precio != '' and nueva_categoria == '' and nuevo_stock != '':
+            parametros = (nuevo_nombre, nuevo_precio, antigua_categoria, nuevo_stock, antiguo_nombre, antiguo_precio, antigua_categoria, antiguo_stock)
+            modificado = True
+
+        elif nuevo_nombre != '' and nuevo_precio != '' and nueva_categoria != '' and nuevo_stock == '':
+            parametros = (nuevo_nombre, nuevo_precio, nueva_categoria, antiguo_stock, antiguo_nombre, antiguo_precio, antigua_categoria, antiguo_stock)
+            modificado = True
+
+        elif nuevo_nombre == '' and nuevo_precio == '' and nueva_categoria != ''and nuevo_stock != '':
+            parametros = (antiguo_nombre, antiguo_precio, nueva_categoria, nuevo_stock, antiguo_nombre, antiguo_precio, antigua_categoria, antiguo_stock)
+            modificado = True
+
+        elif nuevo_nombre != '' and nuevo_precio != '' and nueva_categoria == '' and nuevo_stock == '':
+            parametros = (nuevo_nombre, nuevo_precio, antigua_categoria, antiguo_stock, antiguo_nombre, antiguo_precio, antigua_categoria, antiguo_stock)
+            modificado = True
+
+        elif nuevo_nombre != '' and nuevo_precio == '' and nueva_categoria != '' and nuevo_stock == '':
+            parametros = (nuevo_nombre, antiguo_precio, nueva_categoria, antiguo_stock, antiguo_nombre, antiguo_precio, antigua_categoria, antiguo_stock)
+            modificado = True
+
+        elif nuevo_nombre != '' and nuevo_precio == '' and nueva_categoria == '' and nuevo_stock != '':
+            parametros = (nuevo_nombre, antiguo_precio, antigua_categoria, nuevo_stock, antiguo_nombre, antiguo_precio, antigua_categoria, antiguo_stock)
+            modificado = True
+
+        elif nuevo_nombre == '' and nuevo_precio != ''and nueva_categoria != '' and nuevo_stock == '':
+            parametros = (antiguo_nombre, nuevo_precio, nueva_categoria, antiguo_stock, antiguo_nombre, antiguo_precio, antigua_categoria, antiguo_stock)
+            modificado = True
+
+        elif nuevo_nombre == '' and nuevo_precio != '' and nueva_categoria == '' and nuevo_stock != '':
+            parametros = (antiguo_nombre, nuevo_precio, antigua_categoria, nuevo_stock, antiguo_nombre, antiguo_precio, antigua_categoria, antiguo_stock)
+            modificado = True
 
         if (modificado):
 
@@ -377,13 +679,6 @@ class Producto:
             self.ventana_editar.destroy()
             self.confirmacion['text'] = "El producto {} ha sido actualizado con éxito.".format(antiguo_nombre)
             self.get_producto()
-
-        else:
-
-            self.ventana_editar.destroy()
-            self.confirmacion['text'] = "El producto {} no ha sido actualizado con éxito.".format(antiguo_nombre)
-
-
 
 
 if __name__ == '__main__':
