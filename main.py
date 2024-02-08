@@ -89,6 +89,7 @@ class Producto:
 
 
 
+    #Esta funcion es en donde se creara la base de datos de SQLite teniendo unos datos predefinidos.
     def creacionDb():
         with sqlite3.connect('database/productos.db') as con:
 
@@ -100,16 +101,18 @@ class Producto:
             cur.execute("INSERT INTO productos (Name, Price, Catalogue, Stock) VALUES ('portatil',255,'informatica',25)")
             con.commit()
         return con
+    #lo saque de la funcion para poder utilizarlo en elgun momento en otras funciones
     con = creacionDb()
     cur = con.cursor()
 
+    # en esta funciones es en donde se harán las consultas a la base de datos o si tenemos que editar los datos.
     def consultaDb(self, consulta, parametro = ()):
 
         resultado = self.cur.execute(consulta, parametro)
         self.con.commit()
         return resultado
 
-
+    #En esta funcion es la que utilizaremos para poder ver todo lo que hay dentro de la base de datos.
     def get_producto(self):
 
         registros_tabla = self.tabla.get_children()
@@ -124,6 +127,7 @@ class Producto:
             print(fila)
             self.tabla.insert('', 0, text=fila[0], values=fila[1:])
 
+    #Aquí hice algunas funciones de prueba numerica y alfabetica.
     def pruebaNumerico(self,prueba):
 
         return prueba.isdigit()
@@ -131,6 +135,7 @@ class Producto:
     def pruebaAlpha(self,prueba):
         return prueba.isalpha()
 
+    #en esta funcion implemento tambien las pruebas anteriores.
     def validacionNombre(self):
 
         comprobasion = self.nombre_input.get()
@@ -151,6 +156,7 @@ class Producto:
         comprobasion = self.stock_input.get()
         return len(comprobasion) != 0 and self.pruebaNumerico(comprobasion)
 
+    #en esta funcion añadiremos nuevos datos a la base datos y tambien para que salga en la tabla que haremos en el programa para visualizar los datos de la Data Base
     def get_nuevoProducto(self):
 
         if self.validacionNombre() and self.validacionPrecio() and self.validacionCatalogo() and self.validacionStock():
@@ -180,6 +186,7 @@ class Producto:
         else:
             self.confirmacion['text'] = 'El nombre, el precio, el catalogo y el stock son obligatorios.'
 
+    #En esta funcion eliminaremos los productos puestos en la tabla y tambien directamente de la base de datos.
     def eliminar_producto(self):
 
         self.confirmacion["text"] = ""
@@ -196,8 +203,10 @@ class Producto:
         self.confirmacion["text"]= "Se ha eliminado {} de la lista de productos.".format(nombre)
         self.get_producto()
 
+    #En esta funcion editaremos los productos que estan en la tabla y al mismo tiempo tambien en la base de datos. Abriendo una nueva ventana.
     def editar_producto(self):
 
+        #esta es una prueba de si no selecciones algun articulo te saldra un aviso de para poder editar tienes que seleccionar algun articulo.
         self.confirmacion['text']= ""
         try:
             self.tabla.item(self.tabla.selection())['values'][0]
@@ -218,9 +227,9 @@ class Producto:
         self.ventana_editar.title = 'Editar productos'
         self.ventana_editar.resizable(1,1)
         self.ventana_editar.wm_iconbitmap('recursos/M6_P2_icon.ico')
-        self.ventana_editar.geometry("560x500")  # Para tener una ventana con un tamaño predeterminado
+        self.ventana_editar.geometry("500x490")  # Para tener una ventana con un tamaño predeterminado
 
-        self.titulo = Label(self.ventana_editar, text='Edita tus productos', font=('roman', 50, 'bold'))
+        self.titulo = Label(self.ventana_editar, text='Edita tu producto', font=('roman', 50, 'bold'))
         self.titulo.grid(row = 0,column = 0, columnspan=4, pady=8)
 
         # creacion de un fram donde irá cosas principales.
@@ -280,9 +289,17 @@ class Producto:
         self.boton_actualizar = ttk.Button(frameEditar, text="Actualizar producto", command=lambda:self.actualizar_producto(self.input_antiguo_nombre.get(), self.nombre_inputUno.get(), self.input_antiguo_precio.get(), self.precio_inputDos.get(), self.input_antiguo_categoria.get(), self.categoria_inputTres.get(), self.input_antiguo_stock.get(), self.stock_inputCuatro.get()))
         self.boton_actualizar.grid(row=8, columnspan=4, sticky=W + E, pady=10)
 
+        #un mensaje de confirmacion dentro de la ventana de editar.
         self.confirmacionDos = Label (self.ventana_editar, text="", fg = 'red', font=('Calibri',10, 'bold'))
         self.confirmacionDos.grid(row = 2, column = 0, columnspan = 4)
 
+    """
+    Esto es una funcion que me llevo muchas horas para que quede mas o menos personalizado y con sus diferentes errores que puede haber al editar algun producto de la tabla
+    Aquí tampoco te deja introducir letras y numeros juntos.
+    se podra salir de dos formas normalmente de la ventana de editar.
+    1. saliendo editando lo que quieras y sin que tenga ningun error.
+    2. si no quieres editar nada le daras al boton de actualizar producto pero claramente si no se ha actualizado nada entonces se cerrara la ventana mandando al usuario un error de que no se ha podido actualizar un su producto.
+    """
     def actualizar_producto(self, antiguo_nombre, nuevo_nombre, antiguo_precio, nuevo_precio, antigua_categoria, nueva_categoria, antiguo_stock, nuevo_stock):
 
         modificado = False
@@ -681,7 +698,7 @@ class Producto:
             self.confirmacion['text'] = "El producto {} ha sido actualizado con éxito.".format(antiguo_nombre)
             self.get_producto()
 
-
+# este es el main del programa
 if __name__ == '__main__':
 
     root = Tk()
