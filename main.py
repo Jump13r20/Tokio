@@ -163,6 +163,7 @@ class Producto:
             self.precio_input.delete(0, END)
             self.catalogo_input.delete(0, END)
             self.stock_input.delete(0, END)
+            self.nombre_input.focus()
 
         elif self.validacionNombre() == False and self.validacionPrecio() and self.validacionCatalogo() and self.validacionStock():
             self.confirmacion['text'] = 'necesitas poner el nombre y no puede contener numeros'
@@ -217,9 +218,9 @@ class Producto:
         self.ventana_editar.title = 'Editar productos'
         self.ventana_editar.resizable(1,1)
         self.ventana_editar.wm_iconbitmap('recursos/M6_P2_icon.ico')
-        self.ventana_editar.geometry("540x500")  # Para tener una ventana con un tamaño predeterminado
+        self.ventana_editar.geometry("560x500")  # Para tener una ventana con un tamaño predeterminado
 
-        self.titulo = Label(self.ventana_editar, text='Edita tus productos', font=('Calibri', 50))
+        self.titulo = Label(self.ventana_editar, text='Edita tus productos', font=('roman', 50, 'bold'))
         self.titulo.grid(row = 0,column = 0, columnspan=4, pady=8)
 
         # creacion de un fram donde irá cosas principales.
