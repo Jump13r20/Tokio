@@ -57,7 +57,7 @@ class Producto:
         self.boton.grid(row = 5, columnspan = 2, sticky= W + E, pady= 5)
 
         #texto para confirmar al usuario.
-        self.confirmacion = Label(text="", fg = 'red', font=('Calibri',10, 'bold'))
+        self.confirmacion = Label(text="", fg = 'red', font=('Calibri',11, 'bold'))
         self.confirmacion.grid(row = 1, column = 0, columnspan = 4, sticky= W + E, pady= 10)
 
         #boton eliminar
@@ -96,7 +96,7 @@ class Producto:
             cur = con.cursor()
             cur.execute("DROP TABLE productos")
             print("Se eliminado la tabla")
-            cur.execute("CREATE TABLE productos (id_producto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Name VARCHAR NOT NULL, Price FLOAT NOT NULL, Catalogue TEXT NOT NULL, Stock INTEGER NOT NULL)")
+            cur.execute("CREATE TABLE productos (id_producto INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL, Price FLOAT NOT NULL, Catalogue TEXT NOT NULL, Stock INTEGER NOT NULL)")
             print("Tabla creada")
             cur.execute("INSERT INTO productos (Name, Price, Catalogue, Stock) VALUES ('portatil',255,'informatica',25)")
             con.commit()
